@@ -24,9 +24,14 @@ to use Cairo::CuttingLine to render cutting lines to a canvas:
 
 we need to provide L<Cairo::Context> for L<Cairo::CuttingLine> method new.
 
+    my $surf = Cairo::ImageSurface->create ('argb32', 200 , 200 );
+    my $cr = Cairo::Context->create ($surf);
+
+set Cairo::Context object
+
     my $page = Cairo::CuttingLine->new( $cr );
 
-or set Cairo::Context object by cr accessor
+or by cr accessor
 
     $page->cr( $cr );
 
@@ -36,6 +41,16 @@ or set Cairo::Context object by cr accessor
     $page->line_width( 3 );
     $page->color( 1, 1, 1, 1 );    # for set_source_rgba
     $page->stroke();
+
+=head1 DESCRIPTION
+
+Cairo::CuttingLine draws cutting line like this:
+
+    |       |
+   -+       +-
+      IMAGE
+   -+       +-
+    |       |
 
 =head1 FUNCTIONS
 
@@ -58,7 +73,7 @@ sub cr {
 sub set {
     my $self = shift;
     $self->{p} = { @_ } if @_;
-    $self->{p};
+    return $self->{p};
 }
 
 sub length {
@@ -87,17 +102,22 @@ sub line_width {
 
 sub stroke {
     my $self = shift;
-
     my $cr = $self->{cr};
     $cr->save;
-    $cr->set_source_rgba( @{ $self->{color} } );
+
+    my $color = $self->{color};
+    $color ||= [1,1,1,1];
+
+    $cr->set_source_rgba( @$color );
     $cr->set_line_width( $self->line_width );
-    my $p = $self->set;
+    my $pos = $self->set;
+
     my $s = $self->size;
     my $line_len = $self->length;
 
     for my $p ( 0 .. 3 ) {
-        my ( $c_x, $c_y ) = ( $p->{x}, $p->{y} );
+
+        my ( $c_x, $c_y ) = ( $pos->{x}, $pos->{y} );
         if( $p & 1 ) {
             $c_x += $s->{width};
         }
