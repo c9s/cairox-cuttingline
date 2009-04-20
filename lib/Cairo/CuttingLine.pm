@@ -113,7 +113,7 @@ sub stroke {
     my $pos = $self->set;
 
     my $s = $self->size;
-    my $line_len = $self->length;
+    my $line_len = $self->length || 1;
 
     for my $p ( 0 .. 3 ) {
 
