@@ -60,8 +60,15 @@ sub size {
     $self->{size};
 }
 
+sub color {
+    my $self = shift;
+    $self->{color} = [ @_ ] if @_;
+    $self->{color};
+}
+
 sub stroke {
     my $self = shift;
+
 #    my ( $abbr, $page_cr, $h, $v ) = @_;
 #    $page_cr->save;
 #
