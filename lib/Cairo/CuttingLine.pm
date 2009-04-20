@@ -18,23 +18,24 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
+to use Cairo::CuttingLine to render cutting lines to a canvas:
 
     use Cairo::CuttingLine;
 
+we need to provide L<Cairo::Context> for L<Cairo::CuttingLine> method new.
+
     my $page = Cairo::CuttingLine->new( $cr );
+
+or set Cairo::Context object by cr accessor
+
+    $page->cr( $cr );
+
     $page->set(  x => 10 , y => 10  );
     $page->size( width => 100 , width => 120 );
     $page->length( 10 );
+    $page->line_width( 3 );
+    $page->color( 1, 1, 1, 1 );    # for set_source_rgba
     $page->stroke();
-    ...
-
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
 
 =head1 FUNCTIONS
 
@@ -46,6 +47,18 @@ sub new {
     bless $self , $class;
     $self->{cr} = shift;
     return $self;
+}
+
+sub cr {
+    my $self = shift;
+    $self->{cr} = shift if @_;
+    $self->{cr};
+}
+
+sub set {
+    my $self = shift;
+    $self->{p} = { @_ } if @_;
+    $self->{p};
 }
 
 sub length {
@@ -66,51 +79,47 @@ sub color {
     $self->{color};
 }
 
+sub line_width {
+    my $self = shift;
+    $self->{line_width} = shift if @_;
+    $self->{line_width};
+}
+
 sub stroke {
     my $self = shift;
 
-#    my ( $abbr, $page_cr, $h, $v ) = @_;
-#    $page_cr->save;
-#
-#    my $config = _get_config $abbr;
-#
-#    my $p_x = ( $config->{h_margin} * 2 + $config->{canvas_w} ) * ($h) 
-#                + $config->{h_margin};
-#    my $p_y = ( $config->{v_margin} * 2 + $config->{canvas_h} ) * ($v) 
-#                + $config->{v_margin};
-#
-#    $page_cr->set_source_rgba( @line_rgba );
-#    $page_cr->set_line_width( $line_width );
-#    for my $p ( 0 .. 3 ) {
-#        my ($c_x,$c_y) = ($p_x,$p_y);
-#        if( $p & 1 ) {
-#            $c_x += $config->{canvas_w};
-#        }
-#        if( $p & 2 ) {
-#            $c_y += $config->{canvas_h};
-#        }
-#
-#        $page_cr->move_to( $c_x , $c_y );
-#        $page_cr->line_to(
-#            $c_x + ( $p & 1 ? $line_len : -$line_len ),
-#            $c_y
-#        );
-#
-#        $page_cr->move_to( $c_x , $c_y );
-#        $page_cr->line_to(
-#            $c_x,
-#            $c_y + ( $p & 2 ? $line_len : -$line_len ),
-#        );
-#        $page_cr->stroke();
-#    }
-#    $page_cr->show_page;
-#    $page_cr->restore;
+    my $cr = $self->{cr};
+    $cr->save;
+    $cr->set_source_rgba( @{ $self->{color} } );
+    $cr->set_line_width( $self->line_width );
+    my $p = $self->set;
+    my $s = $self->size;
+
+    for my $p ( 0 .. 3 ) {
+        my ( $c_x, $c_y ) = ( $p->{x}, $p->{y} );
+        if( $p & 1 ) {
+            $c_x += $s->{width};
+        }
+        if( $p & 2 ) {
+            $c_y += $s->{height};
+        }
+
+        $cr->move_to( $c_x , $c_y );
+        $cr->line_to(
+            $c_x + ( $p & 1 ? $line_len : -$line_len ),
+            $c_y
+        );
+
+        $cr->move_to( $c_x , $c_y );
+        $cr->line_to(
+            $c_x,
+            $c_y + ( $p & 2 ? $line_len : -$line_len ),
+        );
+        $cr->stroke();
+    }
+    $cr->show_page;
+    $cr->restore;
 }
-
-
-
-
-
 
 
 
