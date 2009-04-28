@@ -9,11 +9,11 @@ Cairo::CuttingLine - draw cutting line to cairo surface
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 
 =head1 SYNOPSIS
@@ -138,7 +138,6 @@ sub stroke {
         );
         $cr->stroke();
     }
-    $cr->show_page;
     $cr->restore;
 }
 
