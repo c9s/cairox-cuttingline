@@ -3,13 +3,13 @@ use lib 'lib';
 use Test::More tests => 6;
 
 BEGIN {
-	use_ok( 'Cairo::CuttingLine' );
+	use_ok( 'CairoX::CuttingLine' );
 }
 
-diag( "Testing Cairo::CuttingLine $Cairo::CuttingLine::VERSION, Perl $], $^X" );
+diag( "Testing CairoX::CuttingLine $CairoX::CuttingLine::VERSION, Perl $], $^X" );
 
 use Cairo;
-use Cairo::CuttingLine;
+use CairoX::CuttingLine;
 
 my $surf = Cairo::ImageSurface->create( 'argb32', 300, 300 );
 my $cr = Cairo::Context->create($surf);
@@ -17,7 +17,7 @@ my $cr = Cairo::Context->create($surf);
 ok( $surf );
 ok( $cr );
 
-my $page = Cairo::CuttingLine->new( $cr );
+my $page = CairoX::CuttingLine->new( $cr );
 $page->line_width( 2 );
 $page->set( x => 10 , y => 10 );
 $page->size( width => 200 , height => 200 );

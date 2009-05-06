@@ -1,11 +1,11 @@
-package Cairo::CuttingLine;
+package CairoX::CuttingLine;
 
 use warnings;
 use strict;
 
 =head1 NAME
 
-Cairo::CuttingLine - draw cutting line to cairo surface
+CairoX::CuttingLine - draw cutting line to cairo surface
 
 =head1 VERSION
 
@@ -18,18 +18,18 @@ our $VERSION = '0.05';
 
 =head1 SYNOPSIS
 
-to use Cairo::CuttingLine to render cutting lines to a canvas:
+to use CairoX::CuttingLine to render cutting lines to a canvas:
 
-    use Cairo::CuttingLine;
+    use CairoX::CuttingLine;
 
-we need to provide L<Cairo::Context> for L<Cairo::CuttingLine> method new.
+we need to provide L<Cairo::Context> for L<CairoX::CuttingLine> method new.
 
     my $surf = Cairo::ImageSurface->create ('argb32', 200 , 200 );
     my $cr = Cairo::Context->create ($surf);
 
 set Cairo::Context object
 
-    my $page = Cairo::CuttingLine->new( $cr );
+    my $page = CairoX::CuttingLine->new( $cr );
 
 or by cr accessor
 
@@ -44,7 +44,7 @@ or by cr accessor
 
 =head1 DESCRIPTION
 
-Cairo::CuttingLine draws cutting line like this:
+CairoX::CuttingLine draws cutting line like this:
 
     |       |
    -+       +-
@@ -157,7 +157,7 @@ automatically be notified of progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Cairo::CuttingLine
+    perldoc CairoX::CuttingLine
 
 
 You can also look for information at:
@@ -196,4 +196,4 @@ under the same terms as Perl itself.
 
 =cut
 
-1; # End of Cairo::CuttingLine
+1; # End of CairoX::CuttingLine
